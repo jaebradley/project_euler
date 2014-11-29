@@ -11,7 +11,6 @@ for i in range(0,len(file)): #for every name in file, get it's rank (by iteratin
     subscore = 0
     for j in range(0, len(name)): #for each name, iterate through each letter and get it's alphabet score (subscore)
         l = name[j]
-        print l
         val = alphabet_value[l]
         subscore += val
     final_score += score * subscore #add the product of rank score and alphabet score to the final score
