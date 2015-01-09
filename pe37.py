@@ -11,6 +11,8 @@ TOO SLOW
 '''
 
 import numpy as numpy
+import time
+
 def sieve(n):
     """Return an array of the primes below n."""
     prime = numpy.ones(n//3 + (n%6==2), dtype=numpy.bool)
@@ -23,7 +25,7 @@ def sieve(n):
     result[0] = 3
     return numpy.r_[2,result]
 
-def is_prime(test):
+def is_prime(test,prime_list):
     i = 0
     while prime_list[i] <= test:
         if prime_list[i] == test:
@@ -32,32 +34,39 @@ def is_prime(test):
             i += 1
     return 0
 
-prime_list = sieve(1000000)
-trunc_prime_list = list()
-count = 0
-while count < 10:
-    if count == 10:
-        break
-    for a in range(4,len(prime_list)):
-        prime = prime_list[a]
-        prime_str = str(prime)
-        prime_left_str = str(prime)
-        prime_right_str = str(prime)
-        dig = 0
-        for b in range(0,len(prime_str) - 1):
-            prime_left = int(prime_left_str[1:])
-            prime_right = int(prime_right_str[:-1])
-            if is_prime(prime_left) and is_prime(prime_right):
-                prime_left_str = str(prime_left)
-                prime_right_str = str(prime_right)
-                dig += 1
-            else:
+def getDigits(number):
+    digit_list = []
+    while number:
+        digit = number % 10
+        digit_list = [digit] + digit_list
+        number /= 10
+    return digit_list
+
+start_time = time.time()
+prime_list = sieve(748317)
+prime_list2 = sieve(10000000)
+truncatable_primes = []
+for prime in prime_list:
+    if prime > 7:
+        digit_list = getDigits(prime)
+        forward_number_str = ''
+        for digit in digit_list:
+            forward_number_str = forward_number_str + str(digit)
+            forward_number = int(forward_number_str)
+            if (0 == is_prime(forward_number,prime_list2)):
                 break
-            if dig == len(prime_str) - 1:
-                print prime,count
-                trunc_prime_list.append(prime)
-                count += 1
-
-print trunc_prime_list
-print sum(trunc_prime_list)
-
+            elif (1 == is_prime(forward_number,prime_list2)) and (forward_number == prime):
+                backward_number_str = ''
+                for digit in reversed(digit_list):
+                    backward_number_str = str(digit) + backward_number_str
+                    backward_number = int(backward_number_str)
+                    if (0 == is_prime(backward_number,prime_list2)):
+                        break
+                    elif (1 == is_prime(backward_number,prime_list2)) and (backward_number == prime):
+                        truncatable_primes.append(prime)
+                        print prime
+    if len(truncatable_primes) == 11:
+        break
+end_time = time.time()
+print truncatable_primes, sum(truncatable_primes)
+print "Took %s seconds" % (end_time - start_time)
