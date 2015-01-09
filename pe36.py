@@ -17,7 +17,7 @@ for i in range(1, 1000001):
 def is_palindrome(i):
     str_i = str(i)
     word = ""
-    if len(str_i) > 1:
+    if len(str_i) >= 1:
         for z in range(len(str_i) - 1, -1, -1):
             for letter in str_i[z]:
                 word += letter
@@ -32,12 +32,13 @@ def base_two(n):
         n = n/2
     return number
 
+
 def double_palindrome():
     num_list = []
     for i in range(1,1000001):
-        if is_palindrome(i) == 1 and is_palindrome(base_two(i)) == 1:
+        if (is_palindrome(base_two(i)) == 1) and (is_palindrome(i) == 1):
             num_list.append(i)
-    print sum(num_list)
+            print i, base_two(i)
+    return sum(num_list)
 
-double_palindrome()
-
+double_palindrome_sum = double_palindrome()

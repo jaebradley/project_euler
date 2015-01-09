@@ -25,9 +25,9 @@ def sieve(n):
             prime[p*(p-2*(i&1)+4)//3::2*p] = False
     result = (3 * prime.nonzero()[0] + 1) | 1
     result[0] = 3
-    return numpy.r_[2,result]
+    return sorted(numpy.r_[2,result])
 
-def is_prime(test):
+def is_prime(test,prime_list):
     i = 0
     while prime_list[i] <= test:
         if prime_list[i] == test:
@@ -36,40 +36,51 @@ def is_prime(test):
             i += 1
     return 0
 
+def getDigits(number):
+    digit_list = []
+    while number:
+        digit = number % 10
+        digit_list = [digit] + digit_list
+        number /= 10
+    return digit_list
+
+def checkCircularNumbers(digit_list):
+    is_circular_number = 1
+    all_numbers = []
+    if (5 in digit_list) or (0 in digit_list) or (2 in digit_list) or (4 in digit_list) or (6 in digit_list) or (8 in digit_list):
+        is_circular_number = 0
+    for i in range(0,len(digit_list) - 1):
+        digit = digit_list.pop(-1)
+        digit_list = [digit] + digit_list
+        number = int(''.join(str(dig) for dig in digit_list))
+        all_numbers.append(number)
+        if 1 == is_circular_number:
+            if (0 == number % 2) or (0 == number % 5) or (not is_prime(number,prime_list2)) :
+                is_circular_number = 0
+    return is_circular_number,tuple(all_numbers)
+
+def primeNotInCache(circular_numbers_tuple,is_circular,cached_map):
+    for number in circular_numbers_tuple:
+        if number not in cached_map:
+            cached_map[number] = is_circular
+
+
 prime_list = sieve(1000000)
-prime_list_v2 = list()
-circular_primes = list()
+cached_map = {}
+prime_list2 = sieve(2000000)
 
-for a in range(0,len(prime_list)):
-    prime = prime_list[a]
-    prime_str = str(prime)
-    count = 0
-    for b in range(0,len(prime_str)):
-        if int(prime_str[b]) != 2 and int(prime_str[b]) != 4 and int(prime_str[b]) != 5 and int(prime_str[b]) != 6 and int(prime_str[b]) != 8:
-            count += 1
-    if count == len(prime_str) - 1:
-        prime_list_v2.append(prime)
+for prime in prime_list:
+    if (prime >= 100) and (prime not in cached_map):
+        digit_list = getDigits(prime)
+        circular_number_results = checkCircularNumbers(digit_list)
+        is_circular = circular_number_results[0]
+        all_circular_numbers = circular_number_results[1]
+        primeNotInCache(all_circular_numbers,is_circular,cached_map)
+circular_list = []
+for key in cached_map:
+    if cached_map[key] == 1:
+        circular_list.append(key)
 
-print len(prime_list_v2)
-
-for a in range(0,len(prime_list_v2)):
-    print a
-    prime = prime_list_v2[a]
-    prime_str = str(prime)
-    count = 0
-    if len(prime_str) > 1:
-        for b in range(0,len(prime_str)):
-            new_prime = prime_str[1:] + prime_str[0]
-            prime_str = new_prime
-            if is_prime(int(new_prime)) == 1:
-                count += 1
-            else:
-                break
-            if count == len(prime_str) - 1:
-                circular_primes.append(prime)
-    else:
-        circular_primes.append(prime)
-
-print len(circular_primes)
+print circular_list,len(circular_list)
 
 

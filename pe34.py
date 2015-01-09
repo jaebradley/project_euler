@@ -11,18 +11,31 @@ Works but is slow -- should optimize in the future:
 
 import math as math
 from timeit import default_timer as timer
-fact_sum_list = list()
-start = timer()
-for num in range(10,9999999):
-    fact_sum = 0
-    num_string = str(num)
-    len_string = len(num_string)
-    for a in range(0,len_string):
-        digit = int(num_string[a])
-        fact_sum += math.factorial(digit)
-    if fact_sum == num:
-        fact_sum_list.append(num)
 
-ans = sum(fact_sum_list)
+def getSortedDigits(number):
+    digit_list = []
+    while number:
+        digit = number % 10
+        digit_list = [digit] + digit_list
+        number /= 10
+    return tuple(sorted(digit_list))
+
+def calculateFactorialOfDigits(digit_tuple):
+    factorial_sum = 0
+    for digit in digit_tuple:
+        factorial_sum +=math.factorial(digit)
+    return factorial_sum
+
+def checkDigitListInCache(sorted_digit_tuple,cached_map):
+    if sorted_digit_tuple not in cached_map:
+        cached_map[sorted_digit_tuple] = [calculateFactorialOfDigits(sorted_digit_tuple) - sum(sorted_digit_tuple)]
+
+fact_sum_dict = {}
+start = timer()
+for num in range(10,145):
+    print num
+    digit_tuple = getSortedDigits(num)
+    checkDigitListInCache(digit_tuple,fact_sum_dict)
+print fact_sum_dict
 elapsed_time = round((timer() - start),2)
-print "Found %d in %r s" %(ans,elapsed_time)
+#print "Found %d in %r s" %(ans,elapsed_time)
