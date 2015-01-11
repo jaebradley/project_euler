@@ -79,8 +79,6 @@ def findConsecutiveNumbers(prime_factor_count_list):
             return answer
 
 start_time = time.time()
-
-prime_factor_count_list = []
 start_number = 2 * 3 * 5 * 7
 prime_factor_count_dict = generatePrimeFactorDictionary(start_number,1000000)
 prime_factor_count_list = generateSortedPrimeFactorList(prime_factor_count_dict)
