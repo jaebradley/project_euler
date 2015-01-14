@@ -61,3 +61,9 @@ def sieve(n):
     result = (3 * prime.nonzero()[0] + 1) | 1
     result[0] = 3
     return numpy.r_[2,result]
+
+def is_palindrome(num):
+    return str(num) == str(num)[::-1]
+
+def reverse_string(string):
+    return str(string)[::-1]
