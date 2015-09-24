@@ -1,4 +1,3 @@
 *.pyc
 *.xml
-../.idea/workspace.xml
-../.idea/project_euler.iml
+.idea/
