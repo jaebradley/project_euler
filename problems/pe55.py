@@ -1,3 +1,5 @@
+from utils import project_euler_helpers as pe
+
 __author__ = 'jaebradley'
 '''
 If we take 47, reverse and add, 47 + 74 = 121, which is palindromic.
@@ -27,7 +29,6 @@ Brute Force Solution:
     9999 - the final sum.
 '''
 
-import project_euler_helpers as pe
 import time
 
 start_time = time.time()

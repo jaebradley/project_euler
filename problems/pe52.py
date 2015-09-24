@@ -1,3 +1,5 @@
+from utils import project_euler_helpers as pe
+
 __author__ = 'jaebradley'
 '''
 It can be seen that the number, 125874, and its double, 251748, contain exactly the same digits, but in a different order.
@@ -18,7 +20,6 @@ Brute Force Strategy:
 '''
 
 import time
-import project_euler_helpers as pe
 
 start_time = time.time()
 answer = 0

@@ -1,4 +1,6 @@
 # coding=utf-8
+from utils import project_euler_helpers as pe
+
 __author__ = 'jaebradley'
 '''
 Starting with 1 and spiralling anticlockwise in the following way, a square spiral with side length 7 is formed.
@@ -31,7 +33,6 @@ Brute Force Strategy:
     Loop through those diagonals (this process is inefficient) and if diagonal is prime then increment prime count by 1.
     If prime count/length(all diagonals list) < 0.1 then print the current side length, which is the answer, and break out of the for loop
 '''
-import project_euler_helpers as pe
 import time as time
 from decimal import *
 
