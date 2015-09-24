@@ -10,13 +10,14 @@ find the sum of the even-valued terms.
 
 import time
 
+
 def fibonacci_sequence_even_valued_terms_sum(value_limit):
     if 2 == value_limit:
         even_valued_term_sum = 2
     elif 1 == value_limit:
         even_valued_term_sum = 0
     elif 1 > value_limit:
-        raise ValueError("cannot calculate fibonacci sequence for integers less than 1")
+        raise ValueError("cannot calculate fibonacci sequence for integers smaller than 1")
     else:
         even_valued_term_sum = 2
 
@@ -31,11 +32,15 @@ def fibonacci_sequence_even_valued_terms_sum(value_limit):
             second_term = result_term
     return even_valued_term_sum
 
-start_time = time.time()
 
-even_valued_term_sum = fibonacci_sequence_even_valued_terms_sum(4000000)
+def main():
+    start_time = time.time()
 
-end_time = time.time()
-execution_time = end_time - start_time
+    even_valued_term_sum = fibonacci_sequence_even_valued_terms_sum(4000000)
 
-print "the sum of even-valued Fibonacci terms less than four million is {0}; execution time (in seconds): {1}".format(even_valued_term_sum, execution_time)
+    end_time = time.time()
+    execution_time = end_time - start_time
+
+    print "the sum of even-valued Fibonacci terms less than four million is {0}; execution time (in seconds): {1}".format(even_valued_term_sum, execution_time)
+
+main()
