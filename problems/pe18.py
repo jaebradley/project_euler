@@ -1,4 +1,6 @@
 '''
+https://projecteuler.net/problem=18
+
 Problem 18:
 
 By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
@@ -40,27 +42,42 @@ NOTE: As there are only 16384 routes, it is possible to solve this problem by tr
 
 '''
 
-import os as os
-cwd = os.getcwd() #get current directory
-d = {} #dictionary of values
-with open(cwd + '/pe18') as raw_file:
-    row = 0
-    for line in raw_file:
-        converted_list = [int(x) for x in line.split()] #convert strings to ints
-        d[row] = converted_list #dictionary key is "row" number
-        row += 1
+# Strategy to solve this problem involves starting at the very last row and working backwards
+# For each pair of numbers in each row, they map to a parent number in the previous row
+# Now, there's a maximum sum that can be calculated using the parent number and one of it's children
+# You can imagine that if you follow this strategy from the last row to the first row,
+# that the first element in the first row will be the maximum sum that can be calculated by taking adjacent steps from
+# one row to the next
 
-dlen = len(d)
-#from index of last row, in this case, length of dictionary - 1, iterate through row, except first row, to find max value of each pair
-for row in range(dlen - 1,0,-1):
-    rlen = len(d[row])
-    for index in range(0,rlen - 1): #for each pair of values get max, since we are getting pairs the first index value is from 0 to row length - 1
-        index_pair = index + 1
-        first_num = d[row][index]
-        sec_num = d[row][index_pair]
-        max_num = max(first_num,sec_num)
-        parent_value = d[row - 1][index] #parent value
-        new_parent_value = max_num + parent_value
-        d[row - 1][index] = new_parent_value #replace parent value with new value
+import time
 
-print d #max value will be found at key = 0
+
+def return_triangle_as_list_of_lists():
+    pe18_txt = open("../static/pe18.txt")
+    triangle_list = [[int(element) for element in list.split()] for list in pe18_txt]
+    return triangle_list
+
+
+def calculate_maximum_total(triangle_list_of_lists):
+    for row in range(triangle_list_of_lists.__len__() - 1, 0, -1):
+        for row_index in range(0, len(triangle_list_of_lists[row]) - 1, 1):
+            max_value = max(triangle_list_of_lists[row][row_index], triangle_list_of_lists[row][row_index + 1])
+            parent_value = triangle_list_of_lists[row - 1][row_index]
+            new_parent_value = max_value + parent_value
+            triangle_list_of_lists[row - 1][row_index] = new_parent_value
+
+    return triangle_list_of_lists[0][0]
+
+
+def main():
+    start_time = time.time()
+
+    triangle_list_of_lists = return_triangle_as_list_of_lists()
+    maximum_total = calculate_maximum_total(triangle_list_of_lists)
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+
+    print "maximum total is {0}; executed in {1} seconds".format(maximum_total, execution_seconds)
+
+main()
