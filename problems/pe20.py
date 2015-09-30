@@ -10,10 +10,25 @@ and the sum of the digits in the number 10! is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27.
 Find the sum of the digits in the number 100!
 """
 
-import math;
-digit = math.factorial(100) ;
-num = 0;
-for i in str(digit):
-    num += int(i);
+import math
+import time
 
-print num; # answer is 648
+
+def return_sum_digits_of_number(number):
+    digit_sum = 0
+    for digit in str(number):
+        digit_sum += int(digit)
+    return digit_sum
+
+
+def main(number):
+    start_time = time.time()
+
+    digit_sum = return_sum_digits_of_number(number)
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+
+    print "the digit sum is {0}; executed in {1} seconds".format(digit_sum, execution_seconds)
+
+main(math.factorial(100))
