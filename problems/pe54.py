@@ -85,8 +85,6 @@ class Hand:
     def __init__(self, cards):
         self.cards = cards
 
-    def __str__(self):
-        return [card.__str__() for card in self.cards]
 
 class HandRankingCalculator:
 
@@ -298,10 +296,82 @@ class HeadsUpWinnerSelector:
                     winning_hand = self.handB_ranking_calculator.hand
                 else:
                     winning_hand = None
+        elif self.handA_ranking_calculator.is_two_pair() and not self.handB_ranking_calculator.is_two_pair():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_two_pair() and self.handB_ranking_calculator.is_two_pair():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_two_pair() and self.handB_ranking_calculator.is_two_pair():
+            handA_value_counter = Counter([card.high_value for card in self.handA_ranking_calculator.hand.cards])
+            handB_value_counter = Counter([card.high_value for card in self.handB_ranking_calculator.hand.cards])
+            handA_most_common_values = handA_value_counter.most_common()
+            handB_most_common_values = handB_value_counter.most_common()
+            handA_highest_pair_value = max(handA_most_common_values[0][0], handA_most_common_values[1][0])
+            handA_lowest_pair_value = min(handA_most_common_values[0][0], handA_most_common_values[1][0])
+            handA_kicker_value = handA_most_common_values[2][0]
+            handB_highest_pair_value = max(handB_most_common_values[0][0], handB_most_common_values[1][0])
+            handB_lowest_pair_value = min(handB_most_common_values[0][0], handB_most_common_values[1][0])
+            handB_kicker_value = handB_most_common_values[2][0]
+            if handA_highest_pair_value > handB_highest_pair_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_highest_pair_value < handB_highest_pair_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                if handA_lowest_pair_value > handB_lowest_pair_value:
+                    winning_hand = self.handA_ranking_calculator.hand
+                elif handA_lowest_pair_value < handB_lowest_pair_value:
+                    winning_hand = self.handB_ranking_calculator.hand
+                else:
+                    if handA_kicker_value > handB_kicker_value:
+                        winning_hand = self.handA_ranking_calculator.hand
+                    elif handA_kicker_value < handB_kicker_value:
+                        winning_hand = self.handB_ranking_calculator.hand
+                    else:
+                        winning_hand = None
+        elif self.handA_ranking_calculator.is_one_pair() and not self.handB_ranking_calculator.is_one_pair():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_one_pair() and self.handB_ranking_calculator.is_one_pair():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_one_pair() and self.handB_ranking_calculator.is_one_pair():
+            handA_value_counter = Counter([card.high_value for card in self.handA_ranking_calculator.hand.cards])
+            handB_value_counter = Counter([card.high_value for card in self.handB_ranking_calculator.hand.cards])
+            handA_most_common_value = handA_value_counter.most_common(1)[0][0]
+            handB_most_common_value = handB_value_counter.most_common(1)[0][0]
+            if handA_most_common_value > handB_most_common_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_most_common_value < handB_most_common_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                handA_sorted_remaining_values = list(sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards if card.high_value != handA_most_common_value], reverse=True))
+                handB_sorted_remaining_values = list(sorted([card.high_value for card in self.handB_ranking_calculator.hand.cards if card.high_value != handB_most_common_value], reverse=True))
+                winning_hand = None
+                for card_index in range(0, 3):
+                    if handA_sorted_remaining_values[card_index] > handB_sorted_remaining_values[card_index]:
+                        winning_hand = self.handA_ranking_calculator.hand
+                        break
+                    elif handA_sorted_remaining_values[card_index] < handB_sorted_remaining_values[card_index]:
+                        winning_hand = self.handB_ranking_calculator.hand
+                        break
+        elif self.handA_ranking_calculator.is_high_card() and not self.handB_ranking_calculator.is_high_card():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_high_card() and self.handB_ranking_calculator.is_high_card():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_high_card() and self.handB_ranking_calculator.is_high_card():
+            handA_sorted_values = list(sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards], reverse=True))
+            handB_sorted_values = list(sorted([card.high_value for card in self.handB_ranking_calculator.hand.cards], reverse=True))
+            winning_hand = None
+            for card_index in range(0, 5):
+                if handA_sorted_values[card_index] > handB_sorted_values[card_index]:
+                    winning_hand = self.handA_ranking_calculator.hand
+                    break
+                elif handA_sorted_values[card_index] < handB_sorted_values[card_index]:
+                    winning_hand = self.handB_ranking_calculator.hand
+                    break
+        else:
+            winning_hand = None
         return winning_hand
 
 handA = Hand(
-    [Card(5, 5, 1), Card(5, 5, 2), Card(5, 5, 3), Card(5, 5, 4), Card(10, 10, 1)]
+    [Card(13, 1, 1), Card(13, 1, 2), Card(13, 1, 3), Card(13, 1, 4), Card(5, 5, 1)]
 )
 
 handB = Hand(
@@ -309,8 +379,7 @@ handB = Hand(
 )
 
 heads_up_winner = HeadsUpWinnerSelector(handA, handB)
-print heads_up_winner.select_winning_hand().__str__()
-
+print heads_up_winner.select_winning_hand()
 
 
 
