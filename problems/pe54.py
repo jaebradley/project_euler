@@ -76,12 +76,17 @@ class Card:
         self.low_value = low_value
         self.suit = suit
 
+    def __str__(self):
+        return "{0} - {1} - {2} ".format(self.high_value, self.low_value, self.suit)
+
 
 class Hand:
 
     def __init__(self, cards):
         self.cards = cards
 
+    def __str__(self):
+        return [card.__str__() for card in self.cards]
 
 class HandRankingCalculator:
 
@@ -89,7 +94,7 @@ class HandRankingCalculator:
         self.hand = hand
 
     def is_flush(self):
-        if [card.suit for card in self.hand.card][1:] == [card.suit for card in self.hand.card][:-1]:
+        if [card.suit for card in self.hand.cards][1:] == [card.suit for card in self.hand.cards][:-1]:
             return True
         else:
             return False
@@ -130,33 +135,37 @@ class HandRankingCalculator:
             return False
 
     def is_four_of_a_kind(self):
-        distinct_card_values = list(set([card.high_value for card in self.hand.cards]))
-        card_counter = Counter(self.hand.cards)
-        if distinct_card_values.__len__() == 2 and (card_counter[distinct_card_values[0]] == 4 or card_counter[distinct_card_values[0]] == 1):
+        card_values = [card.high_value for card in self.hand.cards]
+        distinct_card_values = list(set(card_values))
+        card_counter = Counter(card_values)
+        if distinct_card_values.__len__() == 2 and (card_counter[card_values[0]] == 4 or card_counter[card_values[0]] == 1):
             return True
         else:
             return False
 
     def is_full_house(self):
-        distinct_card_values = list(set([card.high_value for card in self.hand.cards]))
-        card_counter = Counter(self.hand.cards)
-        if distinct_card_values.__len__() == 2 and (card_counter[distinct_card_values[0]] == 3 or card_counter[distinct_card_values[0]] == 2):
+        card_values = [card.high_value for card in self.hand.cards]
+        distinct_card_values = list(set(card_values))
+        card_counter = Counter(card_values)
+        if distinct_card_values.__len__() == 2 and (card_counter[card_values[0]] == 3 or card_counter[card_values[0]] == 2):
             return True
         else:
             return False
 
     def is_three_of_a_kind(self):
-        distinct_card_values = list(set([card.high_value for card in self.hand.cards]))
-        card_counter = Counter(self.hand.cards)
-        if distinct_card_values.__len__() == 3 and (card_counter[distinct_card_values[0]] == 3 or card_counter[distinct_card_values[1]] == 3 or card_counter[distinct_card_values[2]] == 3):
+        card_values = [card.high_value for card in self.hand.cards]
+        distinct_card_values = list(set(card_values))
+        card_counter = Counter(card_values)
+        if distinct_card_values.__len__() == 3 and (card_counter[card_values[0]] == 3 or card_counter[card_values[1]] == 3 or card_counter[distinct_card_values[2]] == 3):
             return True
         else:
             return False
 
     def is_two_pair(self):
-        distinct_card_values = list(set([card.high_value for card in self.hand.cards]))
-        card_counter = Counter(self.hand.cards)
-        if distinct_card_values.__len__() == 3 and (card_counter[distinct_card_values[0]] == 2 or card_counter[distinct_card_values[1]] == 2 or card_counter[distinct_card_values[2]] == 2):
+        card_values = [card.high_value for card in self.hand.cards]
+        distinct_card_values = list(set(card_values))
+        card_counter = Counter(card_values)
+        if distinct_card_values.__len__() == 3 and (card_counter[card_values[0]] == 2 or card_counter[card_values[1]] == 2 or card_counter[card_values[2]] == 2):
             return True
         else:
             return False
@@ -176,14 +185,131 @@ class HandRankingCalculator:
             return False
 
 
-class WinningHandSelector:
+class HeadsUpWinnerSelector:
 
     def __init__(self, handA, handB):
-        self.handA = handA
-        self.handB = handB
+        self.handA_ranking_calculator = HandRankingCalculator(handA)
+        self.handB_ranking_calculator = HandRankingCalculator(handB)
 
-    
+    def select_winning_hand(self):
+        if self.handA_ranking_calculator.is_straight_flush() and not self.handB_ranking_calculator.is_straight_flush():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_straight_flush() and self.handB_ranking_calculator.is_straight_flush():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_straight_flush() and self.handB_ranking_calculator.is_straight_flush():
+            handA_highest_card_value = sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards], reverse=True)[0]
+            handB_highest_card_value = sorted([card.high_value for card in self.handB_ranking_calculator.hand.cards], reverse=True)[0]
+            if handA_highest_card_value > handB_highest_card_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_highest_card_value < handB_highest_card_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                winning_hand = None
 
+        elif self.handA_ranking_calculator.is_four_of_a_kind() and not self.handB_ranking_calculator.is_four_of_a_kind():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_four_of_a_kind() and self.handB_ranking_calculator.is_four_of_a_kind():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_four_of_a_kind() and self.handB_ranking_calculator.is_four_of_a_kind():
+            handA_four_of_a_kind_value = max(set(self.handA_ranking_calculator.hand.cards), key=self.handA_ranking_calculator.hand.cards.count).high_value
+            handB_four_of_a_kind_value = max(set(self.handB_ranking_calculator.hand.cards), key=self.handB_ranking_calculator.hand.cards.count).high_value
+            if handA_four_of_a_kind_value > handB_four_of_a_kind_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_four_of_a_kind_value < handB_four_of_a_kind_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                handA_kicker = min(set(self.handA_ranking_calculator.hand.cards), key=self.handA_ranking_calculator.hand.cards.count).high_value
+                handB_kicker = min(set(self.handB_ranking_calculator.hand.cards), key=self.handB_ranking_calculator.hand.cards.count).high_value
+                if handA_kicker > handB_kicker:
+                    winning_hand = self.handA_ranking_calculator.hand
+                elif handA_kicker < handB_kicker:
+                    winning_hand = self.handB_ranking_calculator.hand
+                else:
+                    winning_hand = None
+        elif self.handA_ranking_calculator.is_full_house() and not self.handB_ranking_calculator.is_full_house():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_full_house() and self.handB_ranking_calculator.is_full_house():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_full_house() and self.handB_ranking_calculator.is_full_house():
+            handA_three_of_a_kind_value = max(set(self.handA_ranking_calculator.hand.cards), key=self.handA_ranking_calculator.hand.cards.count).high_value
+            handB_three_of_a_kind_value = max(set(self.handB_ranking_calculator.hand.cards), key=self.handB_ranking_calculator.hand.cards.count).high_value
+            if handA_three_of_a_kind_value > handB_three_of_a_kind_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_three_of_a_kind_value < handB_three_of_a_kind_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                handA_two_of_a_kind_value = min(set(self.handA_ranking_calculator.hand.cards), key=self.handA_ranking_calculator.hand.cards.count).high_value
+                handB_two_of_a_kind_value = min(set(self.handB_ranking_calculator.hand.cards), key=self.handB_ranking_calculator.hand.cards.count).high_value
+                if handA_two_of_a_kind_value > handB_two_of_a_kind_value:
+                    winning_hand = self.handA_ranking_calculator.hand
+                elif handA_two_of_a_kind_value < handB_two_of_a_kind_value:
+                    winning_hand = self.handB_ranking_calculator.hand
+                else:
+                    winning_hand = None
+        elif self.handA_ranking_calculator.is_flush() and not self.handB_ranking_calculator.is_flush():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_flush() and self.handB_ranking_calculator.is_flush():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_flush() and self.handB_ranking_calculator.is_flush():
+            sorted_handA = list(sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards], reverse=True))
+            sorted_handB = list(sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards], reverse=True))
+            winning_hand = None
+            for card_index in range(0, 5):
+                if sorted_handA[card_index] > sorted_handB[card_index]:
+                    winning_hand = self.handA_ranking_calculator.hand
+                    break
+                elif sorted_handA[card_index] < sorted_handB[card_index]:
+                    winning_hand = self.handB_ranking_calculator.hand
+                    break
+        elif self.handA_ranking_calculator.is_straight() and not self.handB_ranking_calculator.is_straight():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_straight() and self.handB_ranking_calculator.is_straight():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_straight() and self.handB_ranking_calculator.is_straight():
+            handA_highest_card_value = sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards], reverse=True)[0]
+            handB_highest_card_value = sorted([card.high_value for card in self.handB_ranking_calculator.hand.cards], reverse=True)[0]
+            if handA_highest_card_value > handB_highest_card_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_highest_card_value < handB_highest_card_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                winning_hand = None
+        elif self.handA_ranking_calculator.is_three_of_a_kind() and not self.handB_ranking_calculator.is_three_of_a_kind():
+            winning_hand = self.handA_ranking_calculator.hand
+        elif not self.handA_ranking_calculator.is_three_of_a_kind() and self.handB_ranking_calculator.is_three_of_a_kind():
+            winning_hand = self.handB_ranking_calculator.hand
+        elif self.handA_ranking_calculator.is_three_of_a_kind() and self.handB_ranking_calculator.is_three_of_a_kind():
+            handA_three_of_a_kind_value = max(set(self.handA_ranking_calculator.hand.cards), key=self.handA_ranking_calculator.hand.cards.count).high_value
+            handB_three_of_a_kind_value = max(set(self.handB_ranking_calculator.hand.cards), key=self.handB_ranking_calculator.hand.cards.count).high_value
+            if handA_three_of_a_kind_value > handB_three_of_a_kind_value:
+                winning_hand = self.handA_ranking_calculator.hand
+            elif handA_three_of_a_kind_value < handB_three_of_a_kind_value:
+                winning_hand = self.handB_ranking_calculator.hand
+            else:
+                handA_sorted_remaining_values = sorted([card.high_value for card in self.handA_ranking_calculator.hand.cards if card.high_value != handA_three_of_a_kind_value], reverse=True)
+                handB_sorted_remaining_values = sorted([card.high_value for card in self.handB_ranking_calculator.hand.cards if card.high_value != handB_three_of_a_kind_value], reverse=True)
+                if handA_sorted_remaining_values[0] > handB_sorted_remaining_values[0]:
+                    winning_hand = self.handA_ranking_calculator.hand
+                elif handA_sorted_remaining_values[0] < handB_sorted_remaining_values[0]:
+                    winning_hand = self.handB_ranking_calculator.hand
+                elif handA_sorted_remaining_values[1] > handB_sorted_remaining_values[1]:
+                    winning_hand = self.handA_ranking_calculator.hand
+                elif handA_sorted_remaining_values[0] < handB_sorted_remaining_values[1]:
+                    winning_hand = self.handB_ranking_calculator.hand
+                else:
+                    winning_hand = None
+        return winning_hand
+
+handA = Hand(
+    [Card(5, 5, 1), Card(5, 5, 2), Card(5, 5, 3), Card(5, 5, 4), Card(10, 10, 1)]
+)
+
+handB = Hand(
+    [Card(13, 1, 1), Card(13, 1, 2), Card(13, 1, 3), Card(13, 1, 4), Card(5, 5, 1)]
+)
+
+heads_up_winner = HeadsUpWinnerSelector(handA, handB)
+print heads_up_winner.select_winning_hand().__str__()
 
 
 
