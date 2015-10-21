@@ -14,20 +14,49 @@ Evaluate the sum of all the amicable numbers under 10000.
 import time
 
 
-def sum_div(x):
-    div_sum = 0
-    for div in range(1,x):
-        if x % div == 0:
-            div_sum += div
-    return div_sum
+class AmicableNumber:
+    def __init__(self, first_amicable_pair, second_amicable_pair):
+        self.first_amicable_pair = first_amicable_pair
+        self.second_amicable_pair = second_amicable_pair
 
 
-amicable_sum=0
-for a in range(2,10001):
-    sum_a = sum_div(a)
-    b = sum_a
-    sum_b = sum_div(sum_div(a))
-    if sum_b == a & a != b:
-        print a,b
-        amicable_sum += (a+b)/2
-print amicable_sum
+# TODO: this is a pretty terrible way of calculating proper divisors so figure out a way to optimize in the future
+def return_proper_divisor_sum_for_number(number):
+    divisor_sum = 0
+    for candidate_divisor in range(1, number):
+        if 0 == number % candidate_divisor:
+            divisor_sum += candidate_divisor
+    return divisor_sum
+
+
+def return_amicable_number(number):
+    amicable_number_result = None
+    divisor_sum_for_number = return_proper_divisor_sum_for_number(number)
+    amicable_pair_candidate = return_proper_divisor_sum_for_number(divisor_sum_for_number)
+    if number == amicable_pair_candidate and number != divisor_sum_for_number:
+        amicable_number_result = AmicableNumber(number, divisor_sum_for_number)
+    return amicable_number_result
+
+
+def return_sum_of_amicable_numbers_less_than_limit_inclusive(limit):
+    assert limit > 0
+
+    amicable_number_list = list()
+    for candidate_amicable_number in range(0, limit):
+        if candidate_amicable_number not in amicable_number_list:
+            amicable_number = return_amicable_number(candidate_amicable_number)
+            if isinstance(amicable_number, AmicableNumber):
+                amicable_number_list.append(amicable_number.first_amicable_pair)
+                amicable_number_list.append(amicable_number.second_amicable_pair)
+    print amicable_number_list
+    return sum(amicable_number_list)
+
+
+def main(limit):
+    start_time = time.time()
+    amicable_number_sum = return_sum_of_amicable_numbers_less_than_limit_inclusive(limit)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print "the sum of amicable numbers under {0} is {1}; calculation took {2} seconds".format(limit, amicable_number_sum, execution_time)
+
+main(10000)
