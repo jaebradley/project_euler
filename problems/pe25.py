@@ -33,16 +33,14 @@ def return_number_digit_count(number):
 
 def return_index_of_the_first_fibonacci_number_with_digit_count_limit(fibonacci_digit_limit):
     # store initial fibonacci numbers
-    data = [1, 1]
-    answer = 1
-    # while digit count is greater than the digit count specified calculate next fibonacci number and then store
-    index_value = 2
-    while return_number_digit_count(answer) < fibonacci_digit_limit:
-        n = len(data)
-        answer = data[n-1] + data[n-2]
-        data.append(answer)
-        index_value += 1
-    return index_value
+    fibonacci_numbers = [1, 1]
+    next_fibonacci_number = 2
+    fibonacci_number_index_value = 2
+    while return_number_digit_count(next_fibonacci_number) < fibonacci_digit_limit:
+        next_fibonacci_number = sum(fibonacci_numbers[-2:])
+        fibonacci_number_index_value += 1
+        fibonacci_numbers.append(next_fibonacci_number)
+    return fibonacci_number_index_value
 
 
 def main(fibonacci_digit_limit):
