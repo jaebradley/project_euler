@@ -1,10 +1,10 @@
-'''
+"""
 Trying to find the number of different ways to make two pounds i.e. 200 pence using only
 1 pence, 2 pence, 5 pence, 10 pence, 20 pence, 50 pence, pound (100 pence) and 2 pound (200 pence) coins
 
-'''
+"""
 
-value_dict = {key: 0 for key in range(0,201)}
+value_dict = {key: 0 for key in range(0, 201)}
 
 one = 1
 two = 2

@@ -40,7 +40,6 @@ start_time = time.time()
 fact_sum_dict = {}
 fact_sum_list = []
 for num in range(10,2540160):
-    print num
     digit_data = getSortedDigits(num)
     digit_tuple = digit_data[0]
     digit_list = digit_data[1]
