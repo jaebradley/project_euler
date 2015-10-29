@@ -1,4 +1,4 @@
-'''
+"""
 Starting with the number 1 and moving to the right in a clockwise direction a 5 by 5 spiral is formed as follows:
 
 21 22 23 24 25
@@ -24,7 +24,7 @@ See a pattern?
 L1 has a difference of 2, L2 has a difference of 4, L2 has a difference of 6, etc.
 And each level has exactly 4 elements.
 So basically, you increment the difference by 2 every single level
-'''
+"""
 
 total = 0
 last_increment = 0
@@ -55,3 +55,22 @@ for i in range(0, len(position_list)):
     diag_list.append(grid_list[position_list[i]])
 
 print sum(diag_list)
+
+
+def return_index_values_for_spiral_length_dimension(spiral_length_dimension):
+    diagonal_number_count = 2 * spiral_length_dimension - 1
+    index_values = [0]
+    last_increment_value = 2
+    while index_values.__len__() < diagonal_number_count:
+        last_index_value_for_previous_level = index_values[index_values.__len__() - 1]
+        for diagonal_counter in range(1, 5):
+            index_values.append(last_index_value_for_previous_level + diagonal_counter * last_increment_value)
+        last_increment_value += 2
+    return index_values
+
+
+def calculate_diagonal_sum(diagonal_index_values):
+    numbers = [number for number in range(1, (((diagonal_index_values.__len__() + 1) / 2) ** 2) + 1)]
+    return numbers
+
+index_values = return_index_values_for_spiral_length_dimension(5)
