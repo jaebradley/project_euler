@@ -26,35 +26,7 @@ And each level has exactly 4 elements.
 So basically, you increment the difference by 2 every single level
 """
 
-total = 0
-last_increment = 0
-last_position = 0
-position_list = list() #position indices for diagonal numbers
-position_list.append(0) #adding starting index of 0 to position list
-diag_list = list() #list of all our diagonal numbers
-numbers = 1001 ** 2 #the square is 1001 x 1001 so it must have this many numbers
-
-#while we have less than 1001 x 1001 numbers increase the increment by two and find the next four numbers from the last position
-while total <= numbers:
-    increment = last_increment + 2
-    counter = 0
-    while counter <= 3:
-        position = last_position + increment
-        last_position = position
-        total = last_position
-        if last_position > numbers:
-            break
-        position_list.append(position)
-        counter += 1
-    last_increment = increment
-
-grid_list = list(x for x in range(1,numbers + 1))
-
-for i in range(0, len(position_list)):
-    print position_list[i]
-    diag_list.append(grid_list[position_list[i]])
-
-print sum(diag_list)
+import time
 
 
 def return_index_values_for_spiral_length_dimension(spiral_length_dimension):
@@ -71,6 +43,22 @@ def return_index_values_for_spiral_length_dimension(spiral_length_dimension):
 
 def calculate_diagonal_sum(diagonal_index_values):
     numbers = [number for number in range(1, (((diagonal_index_values.__len__() + 1) / 2) ** 2) + 1)]
-    return numbers
+    diagonal_sum = 0
+    for diagonal_index_value in diagonal_index_values:
+        diagonal_sum += numbers[diagonal_index_value]
+    return diagonal_sum
 
-index_values = return_index_values_for_spiral_length_dimension(5)
+
+def main(spiral_length_dimension):
+
+    start_time = time.time()
+
+    index_values = return_index_values_for_spiral_length_dimension(spiral_length_dimension)
+    diagonal_sum = calculate_diagonal_sum(index_values)
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+    print "diagonal sum is {0} for spiral with length {1}; execution took {2} seconds".format(diagonal_sum, spiral_length_dimension, execution_seconds)
+
+
+main(1001)
