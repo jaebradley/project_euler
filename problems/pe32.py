@@ -8,6 +8,15 @@ Return the sum of all valid pandigital identities
 import time
 
 
+def return_number_digit_list(number):
+    digit_list = []
+    while number:
+        digit = number % 10
+        digit_list = [digit] + digit_list
+        number /= 10
+    return digit_list
+
+
 def is_pandigital(number):
     digit_list = return_number_digit_list(number)
 
@@ -28,15 +37,6 @@ def is_pandigital(number):
     return True
 
 
-def return_number_digit_list(number):
-    digit_list = []
-    while number:
-        digit = number % 10
-        digit_list = [digit] + digit_list
-        number /= 10
-    return digit_list
-
-
 def return_pandigital_list_for_range(start_range_m, end_range_m, start_range_n, end_range_n):
     pandigital_candidate_list = list()
     for m in range(start_range_m,end_range_m + 1):
@@ -50,9 +50,9 @@ def return_pandigital_list_for_range(start_range_m, end_range_m, start_range_n, 
 
 def return_pandigital_sum():
     pandigital_candidate_list = list()
-    pandigital_candidate_list.append(return_pandigital_list_for_range(0, 9, 1000, 9999))
-    pandigital_candidate_list.append(return_pandigital_list_for_range(10, 99, 100, 999))
-    return set(pandigital_candidate_list)
+    pandigital_candidate_list.extend(return_pandigital_list_for_range(0, 9, 1000, 9999))
+    pandigital_candidate_list.extend(return_pandigital_list_for_range(10, 99, 100, 999))
+    return sum(set(pandigital_candidate_list))
 
 
 def main():
