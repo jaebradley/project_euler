@@ -70,3 +70,10 @@ def is_naive_non_trivial_simplification(numerator, denominator):
 
 
 def return_naive_non_trivial_simplification_denominators():
+    denominators = list()
+    for candidate_numerator in range(10, 100):
+        for candidate_denominator in range(10, 100):
+            if is_naive_non_trivial_simplification(numerator=candidate_numerator, denominator=candidate_denominator):
+                denominators.append(candidate_denominator)
+    return denominators
+
