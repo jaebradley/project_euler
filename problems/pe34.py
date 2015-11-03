@@ -1,4 +1,4 @@
-'''
+"""
 145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
 Find the sum of all numbers which are equal to the sum of the factorial of their digits.
 Note: as 1! = 1 and 2! = 2 are not sums they are not included.
@@ -6,9 +6,9 @@ Note: as 1! = 1 and 2! = 2 are not sums they are not included.
 Upper bound is 7 * 9! because 8 * 9! < 99,999,999
 Additional qualification rules such as any two digit number with a digit that's 5+ can't be valid because 5! has more than 2 digits on it's own
 Store the factorial values in a dictionary keyed on a sorted digit tuple so that I can quickly look up new numbers by their sorted digits
-'''
+"""
 
-import math as math
+import math
 import time
 
 def getSortedDigits(number):
