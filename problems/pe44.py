@@ -1,25 +1,37 @@
-'''
+"""
 Find the pair of pentagonal numbers for which their sum and difference are pentagonal
-'''
+"""
+
 
 def is_pentagonal(number):
-    return not (1 + (1 + 24 * number) ** 0.5)/6 % 1 #inverse function for pentagonal number
+    #inverse function for pentagonal number
+    return not (1 + (1 + 24 * number) ** 0.5)/6 % 1
 
-def pentagonal_list(number):
-    pentagonal_list = list()
-    for a in range(1,number + 1):
-        pentagonal = a * (3 * a - 1) / 2
-        pentagonal_list.append(pentagonal)
-    return pentagonal_list
 
-pentagonal_list = pentagonal_list(3000)
-for a in range(0,len(pentagonal_list) - 1):
-    for b in range(a + 1,len(pentagonal_list)):
-        first_pentagonal = pentagonal_list[a]
-        second_pentagonal = pentagonal_list[b]
-        pentagonal_sum = first_pentagonal + second_pentagonal
-        pentagonal_diff = second_pentagonal - first_pentagonal
-        if is_pentagonal(pentagonal_sum) and is_pentagonal(pentagonal_diff):
-            print first_pentagonal,second_pentagonal,pentagonal_diff
+def return_pentagonal(n):
+    return n * (3 * n - 1) / 2
+
+
+def is_sum_and_difference_of_two_pentagonal_numbers_pentagonal(pentagonal1, pentagonal2):
+    if is_pentagonal(pentagonal1 + pentagonal2) and is_pentagonal(abs(pentagonal1 - pentagonal2)):
+        return True
+    else:
+        return False
+
+
+def return_first_pentagonal_number_pentagonal_difference():
+    found_pentagonal = False
+    pentagonals = list()
+    n = 1
+    while not found_pentagonal:
+        next_pentagonal = return_pentagonal(n=n)
+        for previous_pentagonal in pentagonals:
+            if is_sum_and_difference_of_two_pentagonal_numbers_pentagonal(pentagonal1=next_pentagonal, pentagonal2=previous_pentagonal):
+                return next_pentagonal, previous_pentagonal
+        pentagonals.append(next_pentagonal)
+        n += 1
+
+print return_first_pentagonal_number_pentagonal_difference()
+
 
 
