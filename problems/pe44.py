@@ -1,6 +1,7 @@
 """
 Find the pair of pentagonal numbers for which their sum and difference are pentagonal
 """
+import time
 
 
 def is_pentagonal(number):
@@ -31,7 +32,17 @@ def return_first_pentagonal_number_pentagonal_difference():
         pentagonals.append(next_pentagonal)
         n += 1
 
-print return_first_pentagonal_number_pentagonal_difference()
+
+def main():
+    start_time = time.time()
+
+    pentagonal_number_1, pentagonal_number_2 = return_first_pentagonal_number_pentagonal_difference()
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+    print "pentagonal pair is {0}, {1}; execution took {2} seconds".format(pentagonal_number_1, pentagonal_number_2, execution_seconds)
+
+main()
 
 
 
