@@ -1,8 +1,55 @@
 """
+https://projecteuler.net/problem=31
+
 Trying to find the number of different ways to make two pounds i.e. 200 pence using only
 1 pence, 2 pence, 5 pence, 10 pence, 20 pence, 50 pence, pound (100 pence) and 2 pound (200 pence) coins
-
 """
+
+
+class Coin:
+    def __init__(self, value):
+        self.value = value
+
+
+class OnePence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 1)
+
+
+class TwoPence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 2)
+
+
+class FivePence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 5)
+
+
+class TenPence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 10)
+
+
+class TwentyPence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 20)
+
+
+class FiftyPence(Coin):
+    def __init__(self):
+        Coin.__init__(self, 50)
+
+
+class OnePound(Coin):
+    def __init__(self):
+        Coin.__init__(self, 100)
+
+
+class TwoPound(Coin):
+    def __init__(self):
+        Coin.__init__(self, 200)
+
 
 value_dict = {key: 0 for key in range(0, 201)}
 
