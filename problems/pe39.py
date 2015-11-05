@@ -1,3 +1,8 @@
+"""
+If p is the perimeter of a right triangle, which value for p <= 1000 has the most solutions?
+"""
+import math
+
 count_dict = {}
 for x in range(0,1001):
     count_dict[x] = 0
@@ -24,3 +29,18 @@ def keywithmaxval(d):
 
 key = keywithmaxval(count_dict)
 print key,count_dict[key]
+
+def return_pythagorean_triplets_which_sum_under_limit(limit):
+    pythagorean_triplets = list()
+    side_length_limit = int(math.floor(limit / 2))
+    for a in range(1, side_length_limit):
+        for b in range(a + 1, side_length_limit):
+            hypotenuse_squared = a ** 2 + b ** 2
+            # TODO: come up with a better integer identifier
+            if int(hypotenuse_squared) == hypotenuse_squared:
+                hypotenuse = math.sqrt(hypotenuse_squared)
+                if int(hypotenuse) == hypotenuse and a + b + hypotenuse <= limit:
+                    pythagorean_triplets.append(a + b + hypotenuse)
+    return pythagorean_triplets
+
+print return_pythagorean_triplets_which_sum_under_limit(1000)

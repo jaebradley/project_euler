@@ -3,6 +3,9 @@ https://projecteuler.net/problem=31
 
 Trying to find the number of different ways to make two pounds i.e. 200 pence using only
 1 pence, 2 pence, 5 pence, 10 pence, 20 pence, 50 pence, pound (100 pence) and 2 pound (200 pence) coins
+
+Solution is to use dynamic programming.
+Here's a good writeup: http://www.mathblog.dk/project-euler-31-combinations-english-currency-denominations/
 """
 import time
 
