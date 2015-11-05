@@ -4,6 +4,7 @@ https://projecteuler.net/problem=31
 Trying to find the number of different ways to make two pounds i.e. 200 pence using only
 1 pence, 2 pence, 5 pence, 10 pence, 20 pence, 50 pence, pound (100 pence) and 2 pound (200 pence) coins
 """
+import time
 
 
 class Coin:
@@ -100,7 +101,17 @@ def calculate_different_combinations_of_coins_to_make_value(coin_types, value):
 
     return value_dict[value]
 
+
+def main(coin_types, value):
+    start_time = time.time()
+
+    different_combinations = calculate_different_combinations_of_coins_to_make_value(coin_types=coin_types, value=value)
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+    print "there are {0} different ways to make {1}; execution took {2} seconds".format(different_combinations, value, execution_seconds)
+
 coin_types = CoinTypes(True, True, True, True, True, True, True, True)
-print calculate_different_combinations_of_coins_to_make_value(coin_types=coin_types, value=200)
+main(coin_types=coin_types, value=200)
 
 
