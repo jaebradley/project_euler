@@ -63,9 +63,11 @@ def return_number_and_reverse_number_sum(number):
 def is_lychrel(number):
     counter = 0
     lychrel_candidate = number
-    while counter < 50 and not pe.is_palindrome(lychrel_candidate):
+    while counter < 50:
         lychrel_candidate = return_number_and_reverse_number_sum(lychrel_candidate)
         counter += 1
+        if pe.is_palindrome(lychrel_candidate):
+            break
 
     if 50 == counter and not pe.is_palindrome(lychrel_candidate):
         return True
