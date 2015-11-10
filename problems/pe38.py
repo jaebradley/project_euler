@@ -1,4 +1,4 @@
-'''
+"""
 Take the number 192 and multiply it by each of 1, 2, and 3:
 
 192 * 1 = 192
@@ -14,7 +14,7 @@ What is the largest 1 to 9 pandigital 9-digit number that can be formed as the c
 2. If numbers contain more than 9 digits, move on.
 3. If numbers contain more than 1 of any digit, move on.
 4. If not, then see if number is greater than current pandigital number and store original number and n if so, else do not store
-'''
+"""
 pandigital_list = list([0,0])
 for i in range(1,10000):
     print i
@@ -36,7 +36,7 @@ for i in range(1,10000):
 
 print pandigital_list
 
-'''
+"""
 Additional Notes from mathblog.dk
 
 First of all the fixed number must contain less than 5 digits, since n has to be greater than 1.
@@ -50,7 +50,7 @@ So already now we can limit the search to numbers between 9123 and 9876 a mere 7
 We can rather easily limit it a bit more. If the second digit is >4 then we get a carry over which results in the multiplying by 2 part will yield 19xxx instead of 18xxx and thus we have two 9’s which are not possible solutions. Further more non of the digits can be 1 since we will end up with a solution candidate with two 1’s in it.
 
 So the solution space can be shrunk to numbers between 9234 and 9487 which means we would need to check 253 solutions.
-'''
+"""
 
 
 
