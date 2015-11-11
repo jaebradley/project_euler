@@ -1,6 +1,7 @@
 # coding=utf-8
-__author__ = 'jaebradley'
-'''
+"""
+https://projecteuler.net/problem=53
+
 There are exactly ten ways of selecting three from five, 12345:
 
 123, 124, 125, 134, 135, 145, 234, 235, 245, and 345
@@ -16,21 +17,36 @@ r!(n−r)!
 It is not until n = 23, that a value exceeds one-million: 23C10 = 1144066.
 
 How many, not necessarily distinct, values of  nCr, for 1 ≤ n ≤ 100, are greater than one-million?
-'''
+"""
 
 import time
 import math
 
-start_time = time.time()
-combinations_list = []
 
-for r in range(1,100):
-    for n in range(r + 1, 101):
-        combinations = math.factorial(n)/(math.factorial(r) * (math.factorial(n-r)))
-        if combinations > 1000000:
-            combinations_list.append(combinations)
+def return_number_of_conbinations(n, r):
+    return math.factorial(n)/(math.factorial(r) * (math.factorial(n-r)))
 
-answer = len(combinations_list)
-end_time = time.time()
-run_time = end_time - start_time
-print "Took %s seconds to run. Answer is %s" % (run_time, answer)
+
+def return_number_of_combinations_greater_than_limit_inclusive(limit_inclusive, n_upper_limit_inclusive):
+    counter = 0
+    for r in range(1, n_upper_limit_inclusive):
+        for n in range(r + 1, n_upper_limit_inclusive + 1):
+            if return_number_of_conbinations(n=n, r=r) > limit_inclusive:
+                counter += 1
+    return counter
+
+
+def main(limit_inclusive, n_upper_limit_inclusive):
+    start_time = time.time()
+
+    number_of_combinations = return_number_of_combinations_greater_than_limit_inclusive(
+        limit_inclusive=limit_inclusive,
+        n_upper_limit_inclusive=n_upper_limit_inclusive
+    )
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+
+    print "number of combinations greater than {0} is {1}; took {2} seconds".format(limit_inclusive, number_of_combinations, execution_seconds)
+
+main(1000000, 100)

@@ -35,24 +35,6 @@ Brute Force Solution:
 from utils import project_euler_helpers as pe
 import time
 
-start_time = time.time()
-palindrome_count = 0
-for i in range(1,10000):
-    old_number = i
-    for count in range(0,50):
-        num_string = str(old_number)
-        reverse_num_string = pe.reverse_string(num_string)
-        number = old_number + int(reverse_num_string)
-        if pe.is_palindrome(number):
-            palindrome_count += 1
-            break
-        else:
-            old_number = number
-answer = 9999 - palindrome_count
-end_time = time.time()
-run_time = end_time - start_time
-print "Took %s seconds to run. Answer is %s." % (run_time, answer)
-
 
 def return_number_and_reverse_number_sum(number):
     number_string = str(number)
