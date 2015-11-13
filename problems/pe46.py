@@ -1,58 +1,51 @@
-'''
+"""
+https://projecteuler.net/problem=46
+
 What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
-'''
+"""
 
-import numpy as numpy
-def sieve(n):
-    """Return an array of the primes below n."""
-    prime = numpy.ones(n//3 + (n%6==2), dtype=numpy.bool)
-    for i in range(3, int(n**.5) + 1, 3):
-        if prime[i // 3]:
-            p = (i + 1) | 1
-            prime[       p*p//3     ::2*p] = False
-            prime[p*(p-2*(i&1)+4)//3::2*p] = False
-    result = (3 * prime.nonzero()[0] + 1) | 1
-    result[0] = 3
-    return numpy.r_[2,result]
-
-#test if inputed number is prime
-def is_prime(test):
-    i = 0
-    while prime_list[i] <= test:
-        if prime_list[i] == test:
-            return 1
-        else:
-            i += 1
-    return 0
-
-#give me all the double squares less than a specified number
-def double_squares(number):
-    double_square_list = list()
-    for a in range(0,number):
-        double_square = 2 * (a ** 2)
-        if double_square < number:
-            double_square_list.append(double_square)
-        else:
-            break
-    return double_square_list
-
-prime_list = sieve(1000000) # I'm assuming the smallest odd composite is less than 1M
-prime_counter = 1 # dummy value so we can enter while
-start = 3
-while prime_counter != 0:
-    print start
-    double_square_list = double_squares(start)
-    prime_counter = 0
-    for a in range(0,len(double_square_list)):
-        diff = start - double_square_list[a]
-        if is_prime(diff):
-            prime_counter += 1
-    if prime_counter != 0:
-        start += 2
-    else:
-        break
+from __future__ import division
+import math
+import time
+from utils.sieve_of_atkin import SieveOfAtkin
+from utils.is_prime import is_prime
 
 
+def is_candidate_value_sum_of_prime_and_twice_a_square(candidate_number, prime):
+    candidate_square_value = (candidate_number - prime) / 2
+    if math.sqrt(candidate_square_value).is_integer():
+        return True
+
+    return False
 
 
+def return_smallest_odd_composite_that_cannot_be_written_as_sum_of_prime_and_twice_a_square(break_at_upper_limit_inclusive):
+    for candidate_number in range(9, break_at_upper_limit_inclusive + 1, 2):
+        if not is_prime(number=candidate_number):
+            sieve = SieveOfAtkin(limit=candidate_number)
+            primes = sieve.getPrimes()
+            count_of_prime_sum_twice_square = 0
+            for prime in primes:
+                if is_candidate_value_sum_of_prime_and_twice_a_square(
+                    candidate_number=candidate_number,
+                    prime=prime
+                ):
+                    count_of_prime_sum_twice_square += 1
 
+            if 0 == count_of_prime_sum_twice_square:
+                return candidate_number
+
+
+def main(break_at_upper_limit_inclusive):
+    start_time = time.time()
+
+    smallest_odd_composite = return_smallest_odd_composite_that_cannot_be_written_as_sum_of_prime_and_twice_a_square(
+        break_at_upper_limit_inclusive=break_at_upper_limit_inclusive
+    )
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+    print "smallest odd composite is {0}; took {1} seconds".format(smallest_odd_composite, execution_seconds)
+
+
+main(100000000)
