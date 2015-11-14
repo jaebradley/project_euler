@@ -25,3 +25,21 @@ def return_distinct_prime_factors(number):
     if number > 1:
        prime_factors.append(number)
     return set(prime_factors)
+
+
+def is_triangular(number):
+    """
+    inverse function for triangular number
+    :param number:
+    :return:
+    """
+    return not (-1 + (1 + 8 * number) ** 0.5)/2 % 1
+
+
+def is_pentagonal(number):
+    """
+    inverse function for pentagonal number
+    :param number:
+    :return:
+    """
+    return not (1 + (1 + 24 * number) ** 0.5)/6 % 1
