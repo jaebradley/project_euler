@@ -7,7 +7,7 @@ Find the largest palindrome made from the product of two 3-digit numbers.
 """
 
 import time
-from utils.utility_methods import is_palindrome
+from utils.utilities import is_palindrome
 
 # Brute force approach of for looping through all 3-digit numbers
 # However, one would suspect that the largest palindromes should be found when both numbers are closest to 1000.

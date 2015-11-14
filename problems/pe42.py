@@ -13,7 +13,7 @@ If the word value is a triangle number then we shall call the word a triangle wo
 Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly two-thousand common English words, how many are triangle words?
 """
 
-from utils.utility_methods import is_triangular
+from utils.utilities import is_triangular
 import csv
 import string
 import time

@@ -22,7 +22,7 @@ If at any point before reaching the upper limit, the length of the distinct prim
 Took 41 seconds before, now takes ~3 seconds.  Not the best, but the best simple solution I can think of
 """
 
-from utils.utility_methods import return_distinct_prime_factors
+from utils.utilities import return_distinct_prime_factors
 import time
 
 
