@@ -19,64 +19,9 @@ Brute Force:
 5. Iterate from 1 to 28213 and check if number is in tuple list
 """
 from __future__ import division
-import math as math
+import math
+import time
 
-num_list = [number for number in range(1, 28124)]
-# def is_abundant(x):
-#     div_list = list()
-#     sqrt = int(math.sqrt(x)) + 1
-#     for i in range(1,sqrt):
-#         #for divisor from 1 to integer less than sqrt(x)
-#         if x % i is 0:
-#             div_list.append(i)
-#             if x/i != x:
-#                 div_list.append(x/i)
-#     div_list.sort()
-#     dist_div_list = list()
-#     for a in range(0,len(div_list)):
-#         if a < len(div_list) - 1 and div_list[a] != div_list[a+1] :
-#             dist_div_list.append(div_list[a])
-#         elif a == len(div_list) - 1 and div_list[a] != div_list[a-1]:
-#             dist_div_list.append(div_list[a])
-#     if sum(dist_div_list) > x:
-#         return x
-#
-#
-# def abundant_list(limit):
-#     abundant_list = list()
-#     for i in range(1,limit + 1):
-#         print i
-#         output = is_abundant(i)
-#         if output is not None:
-#             abundant_list.append(output)
-#     return abundant_list
-#
-# def abundant_tuple(mylist):
-#     length = len(mylist)
-#     abundant_tuple_list = list()
-#     for i in range(0,length):
-#         for j in range(i,length):
-#             tuple = mylist[i] + mylist[j]
-#             if tuple <= 28123:
-#                 abundant_tuple_list.append(tuple)
-#             else:
-#                 break
-#     abundant_tuple_list.sort()
-#     dist_abundant_tuple_list = list()
-#     abun_tup_length = len(abundant_tuple_list)
-#     for a in range(0,abun_tup_length):
-#         if a < abun_tup_length - 1 and abundant_tuple_list[a] != abundant_tuple_list[a+1] :
-#             dist_abundant_tuple_list.append(abundant_tuple_list[a])
-#         elif a == abun_tup_length - 1 and abundant_tuple_list[a] != abundant_tuple_list[a-1]:
-#             dist_abundant_tuple_list.append(abundant_tuple_list[a])
-#     return dist_abundant_tuple_list
-#
-#
-#
-# mylist = abundant_list(28123)
-# print mylist
-# dist_abundant_tuple_list = abundant_tuple(mylist)
-# print sum(x for x in range(0,28124)) - sum(dist_abundant_tuple_list)
 
 def return_proper_divisors(number):
     divisors = list()
@@ -90,7 +35,7 @@ def return_proper_divisors(number):
     return divisors
 
 
-def is_amicable(number):
+def is_abundant(number):
     divisors = return_proper_divisors(number=number)
     if sum(divisors) > number:
         return True
@@ -98,17 +43,17 @@ def is_amicable(number):
         return False
 
 
-def return_amicable_numbers(limit_inclusive):
+def return_abundant_numbers(limit_inclusive):
     amicable_numbers = list()
     for candidate_number in range(1, limit_inclusive + 1):
-        if is_amicable(number=candidate_number):
+        if is_abundant(number=candidate_number):
             amicable_numbers.append(candidate_number)
     return amicable_numbers
 
 
-def return_amicable_number_sums(limit_inclusive):
+def return_abundant_number_sums(limit_inclusive):
     amicable_number_sums = list()
-    amicable_numbers = return_amicable_numbers(limit_inclusive=limit_inclusive)
+    amicable_numbers = return_abundant_numbers(limit_inclusive=limit_inclusive)
     for first_amicable_number_index in range(0, len(amicable_numbers) - 1):
         for second_amicable_number_index in range(first_amicable_number_index + 1, len(amicable_numbers)):
             amicable_number_sum = amicable_numbers[first_amicable_number_index] + amicable_numbers[second_amicable_number_index]
@@ -118,6 +63,29 @@ def return_amicable_number_sums(limit_inclusive):
 
 
 def return_sum_of_all_positive_integers_which_cannot_be_written_as_a_sum_of_two_abundant_numbers(limit_inclusive):
-    
+    abundant_number_sums = return_abundant_number_sums(limit_inclusive=limit_inclusive)
+    numbers_that_cannot_be_written_as_a_sum_of_two_abundant_numbers = list()
+    for candidate_number in range(1, limit_inclusive + 1):
+        if candidate_number not in abundant_number_sums:
+            numbers_that_cannot_be_written_as_a_sum_of_two_abundant_numbers.append(candidate_number)
+    return sum(numbers_that_cannot_be_written_as_a_sum_of_two_abundant_numbers)
 
+
+def main(limit_inclusive):
+    start_time = time.time()
+
+    sum_of_numbers_that_cannot_be_written_as_a_sum_of_two_abundant_numbers = return_sum_of_all_positive_integers_which_cannot_be_written_as_a_sum_of_two_abundant_numbers(
+        limit_inclusive=limit_inclusive
+    )
+
+    end_time = time.time()
+    execution_seconds = end_time - start_time
+    print "sum of numbers from 1 to {0} that cannot be written as two abundant numbers is {1}; took {2} seconds".format(
+        limit_inclusive,
+        sum_of_numbers_that_cannot_be_written_as_a_sum_of_two_abundant_numbers,
+        execution_seconds
+    )
+
+
+main(limit_inclusive=28213)
 
