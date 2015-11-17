@@ -48,7 +48,6 @@ def return_sum_of_amicable_numbers_less_than_limit_inclusive(limit):
             if isinstance(amicable_number, AmicableNumber):
                 amicable_number_list.append(amicable_number.first_amicable_pair)
                 amicable_number_list.append(amicable_number.second_amicable_pair)
-    print amicable_number_list
     return sum(amicable_number_list)
 
 
